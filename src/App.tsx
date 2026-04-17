@@ -125,10 +125,10 @@ function App() {
               <button
                 type="button"
                 onClick={handleChangeTime}
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-4 py-2 text-xs font-semibold uppercase leading-none tracking-[0.14em] text-stone-600 ring-1 ring-black/10 transition hover:-translate-y-0.5 hover:bg-stone-100"
+                className="font-nunito inline-flex items-center justify-center gap-2 rounded-full bg-white px-4 py-2 text-xs font-semibold uppercase leading-none tracking-[0.14em] text-stone-600 ring-1 ring-black/10 transition hover:-translate-y-0.5 hover:bg-stone-100"
               >
                 <Clock3 className="h-3 w-3 shrink-0" strokeWidth={2.2} />
-                <span className="leading-none font-medium">Change time</span>
+                <span className="leading-none">Change time</span>
               </button>
             </div>
 
