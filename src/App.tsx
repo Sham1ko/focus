@@ -3,7 +3,7 @@ import "./App.css";
 
 const INITIAL_SECONDS = 25;
 const buttonClass =
-  "rounded-2xl px-4 py-3 text-sm font-semibold text-white transition disabled:cursor-not-allowed disabled:opacity-50";
+  "rounded-2xl px-4 py-3 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-50";
 
 function formatTime(totalSeconds: number) {
   const minutes = String(Math.floor(totalSeconds / 60)).padStart(2, "0");
@@ -59,8 +59,8 @@ function App() {
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-[radial-gradient(circle_at_top,_#fff7ed_0%,_#ffedd5_35%,_#fed7aa_100%)] px-6 [font-family:'Trebuchet_MS','Segoe_UI',sans-serif] text-stone-900">
-      <section className="w-full max-w-sm rounded-[24px] border border-white/70 bg-white/80 p-6 text-center shadow-[0_24px_60px_rgba(120,53,15,0.16)] backdrop-blur-md sm:p-8">
+    <main className="flex min-h-screen items-center justify-center bg-[radial-gradient(circle_at_top,#fff7ed_0%,#ffedd5_35%,#fed7aa_100%)] px-6 font-['Trebuchet_MS','Segoe_UI',sans-serif] text-stone-900">
+      <section className="w-full max-w-sm rounded-3xl border border-white/70 bg-white/80 p-6 text-center shadow-[0_24px_60px_rgba(120,53,15,0.16)] backdrop-blur-md sm:p-8">
         <p className="mb-3 text-sm uppercase tracking-[0.14em] text-orange-700">
           simple timer
         </p>
@@ -76,7 +76,7 @@ function App() {
             type="button"
             onClick={handleStart}
             disabled={hasStarted || isFinished}
-            className={`${buttonClass} bg-orange-600 hover:not-disabled:-translate-y-0.5 hover:not-disabled:bg-orange-700`}
+            className={`${buttonClass} bg-orange-600 text-white hover:not-disabled:-translate-y-0.5 hover:not-disabled:bg-orange-700`}
           >
             Start
           </button>
@@ -85,7 +85,7 @@ function App() {
             type="button"
             onClick={handlePauseResume}
             disabled={!hasStarted || isFinished}
-            className={`${buttonClass} bg-stone-700 hover:not-disabled:-translate-y-0.5 hover:not-disabled:bg-stone-800`}
+            className={`${buttonClass} bg-stone-700 text-white hover:not-disabled:-translate-y-0.5 hover:not-disabled:bg-stone-800`}
           >
             {isRunning ? "Pause" : "Resume"}
           </button>
@@ -93,7 +93,7 @@ function App() {
           <button
             type="button"
             onClick={handleReset}
-            className={`${buttonClass} bg-white text-stone-900 ring-1 ring-black/10 hover:not-disabled:-translate-y-0.5 hover:not-disabled:bg-stone-100`}
+            className={`${buttonClass} bg-white text-stone-700 ring-1 ring-black/10 hover:not-disabled:-translate-y-0.5 hover:not-disabled:bg-stone-100`}
           >
             Reset
           </button>
