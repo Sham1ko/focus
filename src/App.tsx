@@ -1,49 +1,90 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import { invoke } from "@tauri-apps/api/core";
+import { useEffect, useState } from "react";
 import "./App.css";
 
-function App() {
-  const [greetMsg, setGreetMsg] = useState("");
-  const [name, setName] = useState("");
+const INITIAL_SECONDS = 25;
 
-  async function greet() {
-    // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-    setGreetMsg(await invoke("greet", { name }));
+function formatTime(totalSeconds: number) {
+  const minutes = String(Math.floor(totalSeconds / 60)).padStart(2, "0");
+  const seconds = String(totalSeconds % 60).padStart(2, "0");
+
+  return `${minutes}:${seconds}`;
+}
+
+function App() {
+  const [secondsLeft, setSecondsLeft] = useState(INITIAL_SECONDS);
+  const [isRunning, setIsRunning] = useState(false);
+  const [hasStarted, setHasStarted] = useState(false);
+  const [isFinished, setIsFinished] = useState(false);
+
+  useEffect(() => {
+    if (!isRunning) {
+      return undefined;
+    }
+
+    const intervalId = window.setInterval(() => {
+      setSecondsLeft((currentSeconds) =>
+        currentSeconds > 0 ? currentSeconds - 1 : 0,
+      );
+    }, 1000);
+
+    return () => window.clearInterval(intervalId);
+  }, [isRunning]);
+
+  useEffect(() => {
+    if (secondsLeft !== 0 || !isRunning) {
+      return;
+    }
+
+    setIsRunning(false);
+    setIsFinished(true);
+  }, [isRunning, secondsLeft]);
+
+  function handleStart() {
+    setHasStarted(true);
+    setIsFinished(false);
+    setIsRunning(true);
+  }
+
+  function handlePauseResume() {
+    setIsRunning((currentValue) => !currentValue);
+  }
+
+  function handleReset() {
+    setSecondsLeft(INITIAL_SECONDS);
+    setIsRunning(false);
+    setHasStarted(false);
+    setIsFinished(false);
   }
 
   return (
-    <main className="container">
-      <h1>Welcome to Tauri + React</h1>
+    <main className="timer-page">
+      <section className="timer-card">
+        <p className="timer-label">simple timer</p>
+        <h1 className="timer-display">{formatTime(secondsLeft)}</h1>
+        {isFinished ? <p className="timer-finished">finished</p> : null}
 
-      <div className="row">
-        <a href="https://vite.dev" target="_blank">
-          <img src="/vite.svg" className="logo vite" alt="Vite logo" />
-        </a>
-        <a href="https://tauri.app" target="_blank">
-          <img src="/tauri.svg" className="logo tauri" alt="Tauri logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <p>Click on the Tauri, Vite, and React logos to learn more.</p>
+        <div className="timer-actions">
+          <button
+            type="button"
+            onClick={handleStart}
+            disabled={hasStarted || isFinished}
+          >
+            Start
+          </button>
 
-      <form
-        className="row"
-        onSubmit={(e) => {
-          e.preventDefault();
-          greet();
-        }}
-      >
-        <input
-          id="greet-input"
-          onChange={(e) => setName(e.currentTarget.value)}
-          placeholder="Enter a name..."
-        />
-        <button type="submit">Greet</button>
-      </form>
-      <p>{greetMsg}</p>
+          <button
+            type="button"
+            onClick={handlePauseResume}
+            disabled={!hasStarted || isFinished}
+          >
+            {isRunning ? "Pause" : "Resume"}
+          </button>
+
+          <button type="button" onClick={handleReset}>
+            Reset
+          </button>
+        </div>
+      </section>
     </main>
   );
 }
