@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import "./App.css";
 
 const INITIAL_SECONDS = 25;
+const buttonClass =
+  "rounded-2xl px-4 py-3 text-sm font-semibold text-white transition disabled:cursor-not-allowed disabled:opacity-50";
 
 function formatTime(totalSeconds: number) {
   const minutes = String(Math.floor(totalSeconds / 60)).padStart(2, "0");
@@ -57,17 +59,24 @@ function App() {
   }
 
   return (
-    <main className="timer-page">
-      <section className="timer-card">
-        <p className="timer-label">simple timer</p>
-        <h1 className="timer-display">{formatTime(secondsLeft)}</h1>
-        {isFinished ? <p className="timer-finished">finished</p> : null}
+    <main className="flex min-h-screen items-center justify-center bg-[radial-gradient(circle_at_top,_#fff7ed_0%,_#ffedd5_35%,_#fed7aa_100%)] px-6 [font-family:'Trebuchet_MS','Segoe_UI',sans-serif] text-stone-900">
+      <section className="w-full max-w-sm rounded-[24px] border border-white/70 bg-white/80 p-6 text-center shadow-[0_24px_60px_rgba(120,53,15,0.16)] backdrop-blur-md sm:p-8">
+        <p className="mb-3 text-sm uppercase tracking-[0.14em] text-orange-700">
+          simple timer
+        </p>
+        <h1 className="m-0 text-[clamp(3rem,12vw,4.8rem)] leading-none text-orange-950">
+          {formatTime(secondsLeft)}
+        </h1>
+        {isFinished ? (
+          <p className="mt-3 text-base text-green-700">finished</p>
+        ) : null}
 
-        <div className="timer-actions">
+        <div className="mt-7 grid gap-3">
           <button
             type="button"
             onClick={handleStart}
             disabled={hasStarted || isFinished}
+            className={`${buttonClass} bg-orange-600 hover:not-disabled:-translate-y-0.5 hover:not-disabled:bg-orange-700`}
           >
             Start
           </button>
@@ -76,11 +85,16 @@ function App() {
             type="button"
             onClick={handlePauseResume}
             disabled={!hasStarted || isFinished}
+            className={`${buttonClass} bg-stone-700 hover:not-disabled:-translate-y-0.5 hover:not-disabled:bg-stone-800`}
           >
             {isRunning ? "Pause" : "Resume"}
           </button>
 
-          <button type="button" onClick={handleReset}>
+          <button
+            type="button"
+            onClick={handleReset}
+            className={`${buttonClass} bg-white text-stone-900 ring-1 ring-black/10 hover:not-disabled:-translate-y-0.5 hover:not-disabled:bg-stone-100`}
+          >
             Reset
           </button>
         </div>
