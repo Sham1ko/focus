@@ -1,12 +1,14 @@
+import type { DurationOption } from "./types";
+
 type DurationPickerScreenProps = {
-  durationOptions: number[];
-  selectedMinutes: number;
-  onSelectDuration: (minutes: number) => void;
+  durationOptions: DurationOption[];
+  selectedDurationInSeconds: number;
+  onSelectDuration: (duration: DurationOption) => void;
 };
 
 function DurationPickerScreen({
   durationOptions,
-  selectedMinutes,
+  selectedDurationInSeconds,
   onSelectDuration,
 }: DurationPickerScreenProps) {
   return (
@@ -22,24 +24,25 @@ function DurationPickerScreen({
       </p>
 
       <div className="mt-8 grid grid-cols-2 gap-3">
-        {durationOptions.map((minutes) => {
-          const isSelected = selectedMinutes === minutes;
+        {durationOptions.map((duration) => {
+          const isSelected =
+            selectedDurationInSeconds === duration.durationInSeconds;
 
           return (
             <button
-              key={minutes}
+              key={duration.id}
               type="button"
-              onClick={() => onSelectDuration(minutes)}
+              onClick={() => onSelectDuration(duration)}
               className={`rounded-2xl border px-4 py-4 text-left transition hover:-translate-y-0.5 ${isSelected
                 ? "border-orange-300 bg-orange-50 text-orange-950 shadow-[0_12px_30px_rgba(234,88,12,0.12)]"
                 : "border-stone-200 bg-white text-stone-700 hover:border-orange-200 hover:bg-orange-50/60"
                 }`}
             >
               <span className="block text-2xl font-semibold leading-none">
-                {minutes}
+                {duration.value}
               </span>
               <span className="mt-2 block text-xs uppercase tracking-[0.14em] opacity-70">
-                minutes
+                {duration.pickerUnitLabel}
               </span>
             </button>
           );

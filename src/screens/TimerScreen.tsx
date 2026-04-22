@@ -4,7 +4,7 @@ const buttonClass =
   "rounded-2xl px-4 py-3 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-50";
 
 type TimerScreenProps = {
-  selectedMinutes: number;
+  selectedDurationLabel: string;
   secondsLeft: number;
   isRunning: boolean;
   hasStarted: boolean;
@@ -23,7 +23,7 @@ function formatTime(totalSeconds: number) {
 }
 
 function TimerScreen({
-  selectedMinutes,
+  selectedDurationLabel,
   secondsLeft,
   isRunning,
   hasStarted,
@@ -47,7 +47,7 @@ function TimerScreen({
       </div>
 
       <p className="mb-3 text-sm uppercase tracking-[0.14em] text-orange-700">
-        {selectedMinutes} minute focus
+        {selectedDurationLabel}
       </p>
       <h1 className="m-0 text-[clamp(3rem,12vw,4.8rem)] leading-none text-orange-950">
         {formatTime(secondsLeft)}

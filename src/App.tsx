@@ -2,14 +2,75 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import DurationPickerScreen from "./screens/DurationPickerScreen";
 import TimerScreen from "./screens/TimerScreen";
+import type { DurationOption } from "./screens/types";
 
-const DURATION_OPTIONS = [5, 10, 15, 25, 30, 60];
-const DEFAULT_MINUTES = 25;
+const PROD_DURATION_OPTIONS: DurationOption[] = [
+  {
+    id: "5-minutes",
+    durationInSeconds: 5 * 60,
+    value: 5,
+    pickerUnitLabel: "minutes",
+    focusUnitLabel: "minute",
+  },
+  {
+    id: "10-minutes",
+    durationInSeconds: 10 * 60,
+    value: 10,
+    pickerUnitLabel: "minutes",
+    focusUnitLabel: "minute",
+  },
+  {
+    id: "15-minutes",
+    durationInSeconds: 15 * 60,
+    value: 15,
+    pickerUnitLabel: "minutes",
+    focusUnitLabel: "minute",
+  },
+  {
+    id: "25-minutes",
+    durationInSeconds: 25 * 60,
+    value: 25,
+    pickerUnitLabel: "minutes",
+    focusUnitLabel: "minute",
+  },
+  {
+    id: "30-minutes",
+    durationInSeconds: 30 * 60,
+    value: 30,
+    pickerUnitLabel: "minutes",
+    focusUnitLabel: "minute",
+  },
+  {
+    id: "60-minutes",
+    durationInSeconds: 60 * 60,
+    value: 60,
+    pickerUnitLabel: "minutes",
+    focusUnitLabel: "minute",
+  },
+];
+
+const DURATION_OPTIONS = import.meta.env.DEV
+  ? [
+    {
+      id: "5-seconds",
+      durationInSeconds: 5,
+      value: 5,
+      pickerUnitLabel: "seconds",
+      focusUnitLabel: "second",
+    },
+    ...PROD_DURATION_OPTIONS,
+  ]
+  : PROD_DURATION_OPTIONS;
+const DEFAULT_DURATION =
+  DURATION_OPTIONS.find((option) => option.durationInSeconds === 25 * 60) ??
+  DURATION_OPTIONS[0];
 
 function App() {
   const [screen, setScreen] = useState<"picker" | "timer">("picker");
-  const [selectedMinutes, setSelectedMinutes] = useState(DEFAULT_MINUTES);
-  const [secondsLeft, setSecondsLeft] = useState(DEFAULT_MINUTES * 60);
+  const [selectedDuration, setSelectedDuration] = useState(DEFAULT_DURATION);
+  const [secondsLeft, setSecondsLeft] = useState(
+    DEFAULT_DURATION.durationInSeconds,
+  );
   const [isRunning, setIsRunning] = useState(false);
   const [hasStarted, setHasStarted] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
@@ -48,15 +109,15 @@ function App() {
   }
 
   function handleReset() {
-    setSecondsLeft(selectedMinutes * 60);
+    setSecondsLeft(selectedDuration.durationInSeconds);
     setIsRunning(false);
     setHasStarted(false);
     setIsFinished(false);
   }
 
-  function handleSelectDuration(minutes: number) {
-    setSelectedMinutes(minutes);
-    setSecondsLeft(minutes * 60);
+  function handleSelectDuration(duration: DurationOption) {
+    setSelectedDuration(duration);
+    setSecondsLeft(duration.durationInSeconds);
     setIsRunning(false);
     setHasStarted(false);
     setIsFinished(false);
@@ -67,7 +128,7 @@ function App() {
     setIsRunning(false);
     setHasStarted(false);
     setIsFinished(false);
-    setSecondsLeft(selectedMinutes * 60);
+    setSecondsLeft(selectedDuration.durationInSeconds);
     setScreen("picker");
   }
 
@@ -77,12 +138,12 @@ function App() {
         {screen === "picker" ? (
           <DurationPickerScreen
             durationOptions={DURATION_OPTIONS}
-            selectedMinutes={selectedMinutes}
+            selectedDurationInSeconds={selectedDuration.durationInSeconds}
             onSelectDuration={handleSelectDuration}
           />
         ) : (
           <TimerScreen
-            selectedMinutes={selectedMinutes}
+            selectedDurationLabel={`${selectedDuration.value} ${selectedDuration.focusUnitLabel} focus`}
             secondsLeft={secondsLeft}
             isRunning={isRunning}
             hasStarted={hasStarted}
